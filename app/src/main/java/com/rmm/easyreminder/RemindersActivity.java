@@ -10,13 +10,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class RemindersActivity extends AppCompatActivity {
+public class RemindersActivity extends AppCompatActivity implements ReminderAdapterEventListener {
 
     ArrayList<Reminder> mReminders;
 
@@ -44,6 +46,13 @@ public class RemindersActivity extends AppCompatActivity {
         refreshData();
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        getMenuInflater().inflate(R.menu.context_reminder, menu);
+    }
+
     void initRemindersData ()
     {
         mReminders = new ArrayList<Reminder>();
@@ -57,7 +66,7 @@ public class RemindersActivity extends AppCompatActivity {
     }
     void initRemindersAdapter ()
     {
-        mRemindersRecyclerViewAdapter = new RemindersRecyclerViewAdapter (mReminders);
+        mRemindersRecyclerViewAdapter = new RemindersRecyclerViewAdapter (mReminders, this);
         mLayoutManager = new LinearLayoutManager (this, LinearLayoutManager.VERTICAL, false);
 
         rv_reminders = findViewById(R.id.rv_reminders);
@@ -125,5 +134,14 @@ public class RemindersActivity extends AppCompatActivity {
         refreshData();
 
         Toast.makeText(this, "New reminded was added successfully", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onItemCreated (View v) {
+        registerForContextMenu(v);
+    }
+
+    @Override
+    public void onItemDataFilled (int i) {
     }
 }

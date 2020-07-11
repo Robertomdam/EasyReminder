@@ -7,7 +7,8 @@
     android:layout_marginVertical="6dp"
     android:layout_marginHorizontal="2dp"
     android:padding="4dp"
-    android:background="@drawable/item_background">
+    android:background="@drawable/item_background"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/item_tv_note"
@@ -16,15 +17,24 @@
         android:layout_weight="0.15"
         android:layout_marginHorizontal="14dp"
         android:text="test"
+        android:gravity="center_vertical"
         />
 
-    <ImageView
-        android:id="@+id/item_iv_notification"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.85"
         android:layout_marginHorizontal="14dp"
-        android:src="@drawable/ic_notifications"
+        android:gravity="center"
+        android:background="@drawable/circle"
+        android:layout_marginVertical="2dp"
+    >
+        <ImageView
+            android:id="@+id/item_iv_notification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_notifications"
         />
+    </FrameLayout>
 
 </LinearLayout>

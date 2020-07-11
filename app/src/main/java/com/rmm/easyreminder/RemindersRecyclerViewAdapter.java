@@ -1,5 +1,6 @@
 package com.rmm.easyreminder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class RemindersRecyclerViewAdapter
         extends RecyclerView.Adapter<RemindersRecyclerViewAdapter.RemindersRecyclerViewViewHolder>
 {
     private ArrayList<Reminder> mReminders;
+    private ReminderAdapterEventListener mEventListener;
 
-    public RemindersRecyclerViewAdapter (ArrayList<Reminder> reminders)
+    public RemindersRecyclerViewAdapter (ArrayList<Reminder> reminders, ReminderAdapterEventListener eventListener)
     {
         mReminders = reminders;
+        mEventListener = eventListener;
     }
 
     public static class RemindersRecyclerViewViewHolder extends RecyclerView.ViewHolder
@@ -40,13 +42,15 @@ public class RemindersRecyclerViewAdapter
     public RemindersRecyclerViewViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate(R.layout.item_reminder, viewGroup, false);
+        mEventListener.onItemCreated (v);
         return new RemindersRecyclerViewViewHolder (v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RemindersRecyclerViewViewHolder remindersRecyclerViewViewHolder, int i) {
         // Fill the views with the data
-        remindersRecyclerViewViewHolder.tv_note.setText( mReminders.get(i).getNote() );;
+        remindersRecyclerViewViewHolder.tv_note.setText( mReminders.get(i).getNote() );
+        mEventListener.onItemDataFilled (i);
     }
 
     @Override
@@ -55,3 +59,8 @@ public class RemindersRecyclerViewAdapter
     }
 }
 
+interface ReminderAdapterEventListener
+{
+    public void onItemCreated (View v);
+    public void onItemDataFilled (int i);
+}
