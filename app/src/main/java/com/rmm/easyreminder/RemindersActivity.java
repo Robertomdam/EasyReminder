@@ -1,5 +1,6 @@
 package com.rmm.easyreminder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -11,8 +12,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -42,15 +44,19 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
     @Override
     protected void onResume() {
         super.onResume();
-
         refreshData();
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
 
-        getMenuInflater().inflate(R.menu.context_reminder, menu);
+        if (item.getItemId() == R.id.cm_item_remove)
+//            Log.d("DEBUGGING", "item to remove: " + mRemindersRecyclerViewAdapter.getSelectedItem());
+            removeReminder(mRemindersRecyclerViewAdapter.getSelectedItem());
+        else
+            Log.d("DEBUGGING", "other thing");
+
+        return super.onContextItemSelected(item);
     }
 
     void initRemindersData ()
@@ -72,6 +78,8 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         rv_reminders = findViewById(R.id.rv_reminders);
         rv_reminders.setLayoutManager(mLayoutManager);
         rv_reminders.setAdapter(mRemindersRecyclerViewAdapter);
+
+        registerForContextMenu(rv_reminders);
 
 //        rv_reminders.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
@@ -115,6 +123,7 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
 
     void refreshData ()
     {
+        mRemindersRecyclerViewAdapter.clearSelectedItem ();
         mRemindersRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -136,9 +145,22 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         Toast.makeText(this, "New reminded was added successfully", Toast.LENGTH_LONG).show();
     }
 
+    void removeReminder (int i)
+    {
+        mReminders.remove(i);
+        refreshData();
+
+        Toast.makeText(this, "Reminder removed successfully", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCreateContextMenuCustom (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        getMenuInflater().inflate(R.menu.context_reminder, contextMenu);;
+    }
+
     @Override
     public void onItemCreated (View v) {
-        registerForContextMenu(v);
+
     }
 
     @Override
