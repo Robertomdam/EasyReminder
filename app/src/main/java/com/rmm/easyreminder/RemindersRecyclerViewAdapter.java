@@ -77,7 +77,7 @@ public class RemindersRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final RemindersRecyclerViewViewHolder remindersRecyclerViewViewHolder, int i) {
         // Fill the views with the data
         remindersRecyclerViewViewHolder.tv_note.setText( mReminders.get(i).getNote() );
-        mEventListener.onItemDataFilled (i);
+        mEventListener.onItemDataFilled (remindersRecyclerViewViewHolder.itemView, i);
 
         final int position = i;
 
@@ -98,5 +98,5 @@ interface ReminderAdapterEventListener
 {
     public void onCreateContextMenuCustom (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo);
     public void onItemCreated (View v);
-    public void onItemDataFilled (int i);
+    public void onItemDataFilled (View v, int i);
 }

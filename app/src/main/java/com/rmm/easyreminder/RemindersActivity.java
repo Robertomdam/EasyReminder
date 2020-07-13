@@ -3,22 +3,25 @@ package com.rmm.easyreminder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import javax.security.auth.login.LoginException;
 
 public class RemindersActivity extends AppCompatActivity implements ReminderAdapterEventListener {
 
@@ -164,6 +167,18 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
     }
 
     @Override
-    public void onItemDataFilled (int i) {
+    public void onItemDataFilled (View v, final int i) {
+
+        final Context context = this;
+
+        ImageView im_notification = v.findViewById(R.id.item_iv_notification);
+
+        im_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationHandler.sendNotification (context, i, mReminders.get(i).getNote()); // Using the position of the reminder in the array list as its notification id
+            }
+        });
+
     }
 }
