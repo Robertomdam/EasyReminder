@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RemindersActivity"
+    tools:context=".view.RemindersActivity"
     android:background="@color/primaryLightColor">
 
     <androidx.recyclerview.widget.RecyclerView

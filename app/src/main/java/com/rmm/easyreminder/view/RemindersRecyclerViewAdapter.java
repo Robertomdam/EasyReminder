@@ -1,18 +1,17 @@
-package com.rmm.easyreminder;
+package com.rmm.easyreminder.view;
 
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.rmm.easyreminder.R;
+import com.rmm.easyreminder.data.Reminder;
 
 import java.util.ArrayList;
 
@@ -57,6 +56,8 @@ public class RemindersRecyclerViewAdapter
             mEventListener.onCreateContextMenuCustom (contextMenu, view, contextMenuInfo);
         }
     }
+
+    void setReminders (ArrayList<Reminder> reminders) { mReminders = reminders; }
 
     @Override
     public void onViewRecycled (RemindersRecyclerViewViewHolder holder)

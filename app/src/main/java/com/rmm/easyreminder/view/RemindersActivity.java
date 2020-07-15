@@ -1,4 +1,4 @@
-package com.rmm.easyreminder;
+package com.rmm.easyreminder.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -13,20 +13,22 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.rmm.easyreminder.R;
+import com.rmm.easyreminder.data.Reminder;
+import com.rmm.easyreminder.data.ReminderManager;
 
 import java.util.ArrayList;
 
 public class RemindersActivity extends AppCompatActivity implements ReminderAdapterEventListener {
 
     ArrayList<Reminder> mReminders;
+    ReminderManager mReminderManager;
 
     RecyclerView rv_reminders;
     RemindersRecyclerViewAdapter mRemindersRecyclerViewAdapter;
@@ -56,6 +58,12 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
     }
 
     @Override
+    protected void onDestroy () {
+        mReminderManager.destroy();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.cm_item_remove)
@@ -66,14 +74,17 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
 
     void initRemindersData ()
     {
-        mReminders = new ArrayList<Reminder>();
+        mReminderManager = new ReminderManager (getApplicationContext());
+        mReminders = mReminderManager.getReminders();
 
-        // Three reminders are created at the begining for testing purposes.
-        for (int i = 0; i < 18; i++) {
-            mReminders.add( new Reminder("Test rem " + i) );
-        }
-
-        mReminders.add( new Reminder("Test Other") );
+//        mReminders = new ArrayList<Reminder>();
+//
+//        // Three reminders are created at the begining for testing purposes.
+//        for (int i = 0; i < 18; i++) {
+//            mReminders.add( new Reminder("Test rem " + i) );
+//        }
+//
+//        mReminders.add( new Reminder("Test Other") );
     }
     void initRemindersAdapter ()
     {
@@ -148,6 +159,15 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
 
     void refreshData ()
     {
+//        mReminders.clear();
+//        for (Reminder r : mReminderManager.getReminders())
+//        {
+//            mReminders.add (r);
+//        }
+
+        mReminders = mReminderManager.getReminders();
+
+        mRemindersRecyclerViewAdapter.setReminders(mReminders);
         mRemindersRecyclerViewAdapter.clearSelectedItem ();
         mRemindersRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -164,15 +184,15 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
 
     void addReminder (String note)
     {
-        mReminders.add (new Reminder(note));
+        mReminderManager.add (new Reminder (note));
         refreshData();
 
         Toast.makeText(this, getResources().getString(R.string.add_reminder), Toast.LENGTH_LONG).show();
     }
 
-    void removeReminder (int i)
+    void removeReminder (int itemIndex)
     {
-        mReminders.remove(i);
+        mReminderManager.remove (mReminders.get(itemIndex).getId());
         refreshData();
 
         Toast.makeText(this, getResources().getString(R.string.remove_reminder), Toast.LENGTH_LONG).show();
