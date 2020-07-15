@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">EasyReminder</string>
+
+    <string name="dialog_reminder_positive">Create</string>
+    <string name="dialog_reminder_negative">Cancel</string>
+    <string name="dialog_reminder_title">Add reminder</string>
+    <string name="add_reminder">New reminded was added successfully</string>
+    <string name="remove_reminder">Reminder removed successfully</string>
+
+    <string name="hint_dialog_add_reminder">Feed the dog…</string>
+
+    <string name="content_description_notification">Notification</string>
 </resources>

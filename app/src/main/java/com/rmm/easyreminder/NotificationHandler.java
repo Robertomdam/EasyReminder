@@ -6,53 +6,66 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationHandler {
 
-    private static final String CHANNEL_ID = "001";
+    private static final String CHANNEL_ID   = "001";
+    private static final String CHANNEL_NAME = "CHANNEL-" + CHANNEL_ID;
 
-    static void sendNotification (Context context, int notification_id, String text)
-    {
+    private static final int    CHANNEL_IMPORTANCE        = NotificationManager.IMPORTANCE_DEFAULT;
+    private static final int    NOTIFICATION_IMPORTANCE   = NotificationCompat.PRIORITY_DEFAULT;
+
+    private Context mContext;
+
+    NotificationHandler (Context context) {
+
+        mContext = context;
+
         // Checks the version of the sdk, because since 'x' version it is necessarily to create a channel for sending notifications
-        createChannel (context);
+        createChannel();
+    }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder (context, CHANNEL_ID);
+    private void createChannel ()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            Log.d("DEBUGGING", "Channel created");
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMPORTANCE);
+
+//            context.getSystemService (NotificationManager.class).createNotificationChannel(channel);
+            NotificationManagerCompat.from (mContext).createNotificationChannel(channel);
+        }
+    }
+
+    void sendNotification (int notification_id, String text)
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder (mContext, CHANNEL_ID);
 
         // Basic notification data
         builder.setSmallIcon (R.drawable.ic_notification);
-        builder.setPriority (NotificationCompat.PRIORITY_DEFAULT);
+        builder.setPriority (NOTIFICATION_IMPORTANCE);
 
         builder.setContentTitle (text);
-        builder.setContentText (context.getResources().getString(R.string.app_name));
+//        builder.setContentText (context.getResources().getString(R.string.app_name));
+
+        // Channel for API >= 26
+        builder.setChannelId (CHANNEL_ID);
 
 //        builder.setStyle(new NotificationCompat.BigTextStyle ().bigText(""));
 
         // Tap action
+        Intent intent = new Intent (mContext, RemindersActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity (mContext, 0, intent, 0);
+        builder.setContentIntent (pendingIntent);
 
 //        builder.setAutoCancel(true);
 
-        Intent intent = new Intent (context, RemindersActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity (context, 0, intent, 0);
-        builder.setContentIntent (pendingIntent);
-
         // Notification sending
-        NotificationManagerCompat.from(context).notify (notification_id, builder.build());
-    }
-
-    private static void createChannel (Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            CharSequence name = "name";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-            NotificationChannel channel = new NotificationChannel("qwe", name, importance);
-
-//            getSystemService (NotificationManager.class).createNotificationChannel(channel);
-            NotificationManagerCompat.from (context).createNotificationChannel(channel);
-        }
+        NotificationManagerCompat.from(mContext).notify (notification_id, builder.build());
     }
 }

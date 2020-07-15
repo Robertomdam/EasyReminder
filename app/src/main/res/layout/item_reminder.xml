@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.15"
         android:layout_marginHorizontal="14dp"
-        android:text="test"
+        android:text=""
         android:gravity="center_vertical"
         />
 
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_notifications"
-        />
+            android:contentDescription="@string/content_description_notification" />
     </FrameLayout>
 
 </LinearLayout>
