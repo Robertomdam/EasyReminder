@@ -26,7 +26,6 @@ public class ReminderManager {
 
     public void remove (int id)
     {
-        Log.d("DEBUGGING", "remove: " + id);
         mDatabase.remove (id);
     }
 

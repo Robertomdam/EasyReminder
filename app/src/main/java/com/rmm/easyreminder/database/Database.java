@@ -34,12 +34,11 @@ public class Database extends SQLiteOpenHelper {
     public void insert (Reminder reminder)
     {
         ContentValues contentValues = new ContentValues();
-//        contentValues.put (DB_Const.SQL_COL_NAME_ID  , reminder.getId()  );
         contentValues.put (DB_Const.SQL_COL_NAME_NOTE, reminder.getNote());
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(DB_Const.SQL_TABLE_NAME_REMINDERS, null, contentValues);
-debugTable (DB_Const.SQL_TABLE_NAME_REMINDERS);
+//debugTable (DB_Const.SQL_TABLE_NAME_REMINDERS);
     }
 
     public void remove (Reminder reminder)
@@ -53,7 +52,7 @@ debugTable (DB_Const.SQL_TABLE_NAME_REMINDERS);
 
         SQLiteDatabase db = getWritableDatabase();
         db.delete (DB_Const.SQL_TABLE_NAME_REMINDERS, DB_Const.SQL_COL_NAME_ID + " = ? ", args);
-debugTable(DB_Const.SQL_TABLE_NAME_REMINDERS);
+//debugTable(DB_Const.SQL_TABLE_NAME_REMINDERS);
     }
 
     public ArrayList<Reminder> retrieveReminders ()
@@ -129,7 +128,7 @@ debugTable(DB_Const.SQL_TABLE_NAME_REMINDERS);
             int      _id = cursor.getInt    ( cursor.getColumnIndexOrThrow (DB_Const.SQL_COL_NAME_ID  ) );
             String _note = cursor.getString ( cursor.getColumnIndexOrThrow (DB_Const.SQL_COL_NAME_NOTE) );
 
-            Log.d("DEBUGGING", "rem: " + _id + " - " + _note);
+//            Log.d("DEBUGGING", "rem: " + _id + " - " + _note);
         };
 
         cursor.close();

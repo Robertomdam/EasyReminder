@@ -76,15 +76,6 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
     {
         mReminderManager = new ReminderManager (getApplicationContext());
         mReminders = mReminderManager.getReminders();
-
-//        mReminders = new ArrayList<Reminder>();
-//
-//        // Three reminders are created at the begining for testing purposes.
-//        for (int i = 0; i < 18; i++) {
-//            mReminders.add( new Reminder("Test rem " + i) );
-//        }
-//
-//        mReminders.add( new Reminder("Test Other") );
     }
     void initRemindersAdapter ()
     {
@@ -159,12 +150,6 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
 
     void refreshData ()
     {
-//        mReminders.clear();
-//        for (Reminder r : mReminderManager.getReminders())
-//        {
-//            mReminders.add (r);
-//        }
-
         mReminders = mReminderManager.getReminders();
 
         mRemindersRecyclerViewAdapter.setReminders(mReminders);
@@ -218,7 +203,6 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         im_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("DEBUGGING", "Clicked not");
                 mNotificationHandler.sendNotification (i, mReminders.get(i).getNote()); // Using the position of the reminder in the array list as its notification id
             }
         });
