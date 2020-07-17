@@ -25,17 +25,15 @@ import com.rmm.easyreminder.data.ReminderManager;
 
 import java.util.ArrayList;
 
-public class RemindersActivity extends AppCompatActivity implements ReminderAdapterEventListener {
+public class RemindersActivity extends AppCompatActivity implements IReminders.IView, ReminderAdapterEventListener {
 
-    ArrayList<Reminder> mReminders;
-    ReminderManager mReminderManager;
+    IReminders.IPresenter mPresenter;
 
     RecyclerView rv_reminders;
     RemindersRecyclerViewAdapter mRemindersRecyclerViewAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     AlertDialog mAlertDialog;
-
     NotificationHandler mNotificationHandler;
 
     @Override
@@ -43,43 +41,61 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
 
-        initRemindersData();
-        initRemindersAdapter();
-        initFloatingActionButton();
-        initDialogInputReminder();
-
-        mNotificationHandler = new NotificationHandler (this);
+        mPresenter = new RemindersPresenter (this, getApplicationContext());
+        mPresenter.onCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshData();
+        mPresenter.onPause();
     }
 
     @Override
     protected void onDestroy () {
-        mReminderManager.destroy();
+        mPresenter.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void init(ArrayList<Reminder> reminders) {
+
+        initRemindersAdapter (reminders);
+        initFloatingActionButton ();
+        initDialogInputReminder ();
+
+        mNotificationHandler = new NotificationHandler (this);
+    }
+
+    @Override
+    public void refresh(ArrayList<Reminder> reminders) {
+        mRemindersRecyclerViewAdapter.setReminders(reminders);
+        mRemindersRecyclerViewAdapter.clearSelectedItem ();
+        mRemindersRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void sendNotification(int id, String text) {
+        mNotificationHandler.sendNotification (id, text); // Using the position of the reminder in the array list as its notification id
+    }
+
+    @Override
+    public void sendFeedbackToast(String text) {
+        Toast.makeText (this, text, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.cm_item_remove)
-            removeReminder(mRemindersRecyclerViewAdapter.getSelectedItem());
+            mPresenter.onRemoveReminderButtonClick (mRemindersRecyclerViewAdapter.getSelectedItem());
 
         return super.onContextItemSelected(item);
     }
 
-    void initRemindersData ()
+    void initRemindersAdapter (ArrayList<Reminder> reminders)
     {
-        mReminderManager = new ReminderManager (getApplicationContext());
-        mReminders = mReminderManager.getReminders();
-    }
-    void initRemindersAdapter ()
-    {
-        mRemindersRecyclerViewAdapter = new RemindersRecyclerViewAdapter (mReminders, this);
+        mRemindersRecyclerViewAdapter = new RemindersRecyclerViewAdapter (reminders, this);
         mLayoutManager = new LinearLayoutManager (this, LinearLayoutManager.VERTICAL, false);
 
         rv_reminders = findViewById(R.id.rv_reminders);
@@ -138,23 +154,12 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         dialogBuilder.setPositiveButton(getResources().getString(R.string.dialog_reminder_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
-                if (et_note.length() > 0)
-                    addReminder(et_note.getText().toString());
+                mPresenter.onAddReminderButtonClick (et_note.getText().toString());
             }
         });
 
         mAlertDialog = dialogBuilder.create();
         mAlertDialog.setTitle (getResources().getString(R.string.dialog_reminder_title));
-    }
-
-    void refreshData ()
-    {
-        mReminders = mReminderManager.getReminders();
-
-        mRemindersRecyclerViewAdapter.setReminders(mReminders);
-        mRemindersRecyclerViewAdapter.clearSelectedItem ();
-        mRemindersRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     void showDialogInputReminder ()
@@ -165,22 +170,6 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         EditText et = mAlertDialog.findViewById (R.id.et_input_note);
         if (et != null)
             et.setText("");
-    }
-
-    void addReminder (String note)
-    {
-        mReminderManager.add (new Reminder (note));
-        refreshData();
-
-        Toast.makeText(this, getResources().getString(R.string.add_reminder), Toast.LENGTH_LONG).show();
-    }
-
-    void removeReminder (int itemIndex)
-    {
-        mReminderManager.remove (mReminders.get(itemIndex).getId());
-        refreshData();
-
-        Toast.makeText(this, getResources().getString(R.string.remove_reminder), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -203,7 +192,7 @@ public class RemindersActivity extends AppCompatActivity implements ReminderAdap
         im_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mNotificationHandler.sendNotification (i, mReminders.get(i).getNote()); // Using the position of the reminder in the array list as its notification id
+                mPresenter.onSendNotificationButtonClick (i);
             }
         });
 
