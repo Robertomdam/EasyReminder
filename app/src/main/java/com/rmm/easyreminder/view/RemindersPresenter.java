@@ -8,10 +8,10 @@ import com.rmm.easyreminder.data.ReminderManager;
 
 public class RemindersPresenter implements IReminders.IPresenter {
 
-    IReminders.IView   mView;
-    IReminders.IModel mModel;
+    private IReminders.IView   mView;
+    private IReminders.IModel mModel;
 
-    Context mContext;
+    private Context mContext;
 
     public RemindersPresenter (IReminders.IView view, Context context)
     {
@@ -39,7 +39,6 @@ public class RemindersPresenter implements IReminders.IPresenter {
     @Override
     public void onAddReminderButtonClick(String reminderNote) {
 
-        // GESTIONAR ESTE CASO
         if (reminderNote.length() == 0)
             return;
 

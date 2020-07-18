@@ -5,6 +5,9 @@
     <string name="dialog_reminder_positive">Crear</string>
     <string name="dialog_reminder_negative">Cancelar</string>
     <string name="dialog_reminder_title">Añadir reminder</string>
+
+    <string name="context_menu_remove_reminder">Eliminar</string>
+
     <string name="add_reminder">Se ha añadido un nuevo recordatorio</string>
     <string name="remove_reminder">Recordatorio eliminado</string>
 

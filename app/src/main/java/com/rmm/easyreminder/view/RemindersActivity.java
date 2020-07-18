@@ -27,14 +27,14 @@ import java.util.ArrayList;
 
 public class RemindersActivity extends AppCompatActivity implements IReminders.IView, ReminderAdapterEventListener {
 
-    IReminders.IPresenter mPresenter;
+    private IReminders.IPresenter mPresenter;
 
-    RecyclerView rv_reminders;
-    RemindersRecyclerViewAdapter mRemindersRecyclerViewAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView rv_reminders;
+    private RemindersRecyclerViewAdapter mRemindersRecyclerViewAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    AlertDialog mAlertDialog;
-    NotificationHandler mNotificationHandler;
+    private AlertDialog mAlertDialog;
+    private NotificationHandler mNotificationHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
