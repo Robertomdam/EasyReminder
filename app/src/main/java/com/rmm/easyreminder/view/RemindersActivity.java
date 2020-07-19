@@ -160,6 +160,20 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
 
         mAlertDialog = dialogBuilder.create();
         mAlertDialog.setTitle (getResources().getString(R.string.dialog_reminder_title));
+
+        mAlertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+
+                // Min API 23:
+//                mAlertDialog.getButton (AlertDialog.BUTTON_POSITIVE).setTextColor (getResources().getColor(R.color.black, null));
+//                mAlertDialog.getButton (AlertDialog.BUTTON_NEGATIVE).setTextColor (getResources().getColor(R.color.errorLight, null));
+
+                // Min API 22:
+                mAlertDialog.getButton (AlertDialog.BUTTON_POSITIVE).setTextColor (getResources().getColor(R.color.black));
+                mAlertDialog.getButton (AlertDialog.BUTTON_NEGATIVE).setTextColor (getResources().getColor(R.color.errorLight));
+            }
+        });
     }
 
     void showDialogInputReminder ()
