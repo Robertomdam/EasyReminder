@@ -24,6 +24,10 @@ This is a very simple app that has educational purposes, made to learn deeper th
 * Support both english and spanish languages.
 * Adaptatable to diferent screen sizes and aspect ratios.
 
+## Snapshots
+
+<img src="https://github.com/Robertomdam/EasyReminder/blob/master/snapshots/Fmain_com.rmm.easyreminder.jpg" height="384" width="216"><img src="https://github.com/Robertomdam/EasyReminder/blob/master/snapshots/Fadd_com.rmm.easyreminder.jpg" height="384" width="216"><img src="https://github.com/Robertomdam/EasyReminder/blob/master/snapshots/Fnot_com.rmm.easyreminder.jpg" height="384" width="216">
+
 ### Technical features
 
 * The app's project estructure has a MVP pattern as a way to organzize the code in a modular form.
