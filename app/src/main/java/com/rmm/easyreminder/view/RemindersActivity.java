@@ -41,6 +41,11 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
 
+//        getSupportActionBar().setIcon(R.mipmap.ic_logo_foreground);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setCustomView (R.layout.custom_toolbar);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+
         mPresenter = new RemindersPresenter (this, getApplicationContext());
         mPresenter.onCreate();
     }
