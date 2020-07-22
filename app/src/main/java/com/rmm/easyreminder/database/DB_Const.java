@@ -1,5 +1,9 @@
 package com.rmm.easyreminder.database;
 
+/**
+ * @author Roberto
+ * Helper class with several constants to be used to manage the database.
+ */
 public class DB_Const {
 
     static final int    SQL_DATABASE_VERSION = 1;
