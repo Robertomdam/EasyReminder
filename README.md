@@ -42,4 +42,4 @@ In order to open the project you need to download the repository and open it wit
 
 ## App (In process of being updated)
 
-The app is going to be uploaded to Google Play Store soon.. 
+The app is available in Google Play Store by clicking [here] (https://play.google.com/store/apps/details?id=com.rmm.easyreminder&hl=es_419)

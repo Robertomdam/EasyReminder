@@ -8,6 +8,10 @@ import com.rmm.easyreminder.data.Reminder;
 
 import java.util.ArrayList;
 
+/**
+ * @author Roberto
+ * Interface to accomplish MVP in RemindersActivity.
+ */
 public interface IReminders {
 
     public interface IView

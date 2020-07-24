@@ -25,6 +25,10 @@ import com.rmm.easyreminder.data.ReminderManager;
 
 import java.util.ArrayList;
 
+/**
+ * @author Roberto
+ * Launcher activity of the app. It handles the reminders and all its manipulation operations.
+ */
 public class RemindersActivity extends AppCompatActivity implements IReminders.IView, ReminderAdapterEventListener {
 
     private IReminders.IPresenter mPresenter;
@@ -36,6 +40,10 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
     private AlertDialog mAlertDialog;
     private NotificationHandler mNotificationHandler;
 
+    /**
+     * Configures the SupportActionBar and creates the presenter.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +58,28 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         mPresenter.onCreate();
     }
 
+    /**
+     * Notifies the presenter to be paused.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.onPause();
     }
 
+    /**
+     * Calls the presenter to be destroyed.
+     */
     @Override
     protected void onDestroy () {
         mPresenter.onDestroy();
         super.onDestroy();
     }
 
+    /**
+     * Initializes the main components of the activity.
+     * @param reminders
+     */
     @Override
     public void init(ArrayList<Reminder> reminders) {
 
@@ -72,6 +90,11 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         mNotificationHandler = new NotificationHandler (this);
     }
 
+    /**
+     * Resets the reminders data of the recycler view and notifies that its data has changed, in
+     * order to refresh it.
+     * @param reminders The new reminders data.
+     */
     @Override
     public void refresh(ArrayList<Reminder> reminders) {
         mRemindersRecyclerViewAdapter.setReminders(reminders);
@@ -79,16 +102,30 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         mRemindersRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Calls the notification handler to send a notification.
+     * @param id The id of the notification.
+     * @param text The text to show in the notification.
+     */
     @Override
     public void sendNotification(int id, String text) {
         mNotificationHandler.sendNotification (id, text); // Using the position of the reminder in the array list as its notification id
     }
 
+    /**
+     * Shows a toast in the string.
+     * @param text The text to show in the toast.
+     */
     @Override
     public void sendFeedbackToast(String text) {
         Toast.makeText (this, text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Callback method that calls the presenter to remove the reminder that matches with the item selected.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
@@ -98,6 +135,12 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         return super.onContextItemSelected(item);
     }
 
+    /**
+     * Initializes the RecyclerAdapter used to handle the list of reminders.
+     * Creates the adapter and sets it to the activity.
+     * Also register the recycler for context menu events.
+     * @param reminders
+     */
     void initRemindersAdapter (ArrayList<Reminder> reminders)
     {
         mRemindersRecyclerViewAdapter = new RemindersRecyclerViewAdapter (reminders, this);
@@ -112,6 +155,9 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
 //        rv_reminders.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
+    /**
+     * Initializes the FloatingActionButton by configuring its onClick event.
+     */
     void initFloatingActionButton()
     {
         findViewById (R.id.fab_reminders).setOnClickListener(new View.OnClickListener() {
@@ -122,6 +168,10 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         });
     }
 
+    /**
+     * Initializes the AlertDialog that lets the user creates new reminders.
+     * Also, configures some views that belongs to its layout.
+     */
     void initDialogInputReminder()
     {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder (this);
@@ -181,6 +231,10 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
         });
     }
 
+    /**
+     * Shows the AlertDialog used to lets the user creates a new reminder.
+     * Its EditText gets cleared of data.
+     */
     void showDialogInputReminder ()
     {
         mAlertDialog.show();
@@ -191,16 +245,31 @@ public class RemindersActivity extends AppCompatActivity implements IReminders.I
             et.setText("");
     }
 
+    /**
+     * Inflates the context menu layout.
+     * @param contextMenu
+     * @param view
+     * @param contextMenuInfo
+     */
     @Override
     public void onCreateContextMenuCustom (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         getMenuInflater().inflate(R.menu.context_reminder, contextMenu);;
     }
 
+    /**
+     *
+     * @param v
+     */
     @Override
     public void onItemCreated (View v) {
 
     }
 
+    /**
+     * Callback method that configures the onClick event for the notification button.
+     * @param v The view of the item that is being processed.
+     * @param i The item's index.
+     */
     @Override
     public void onItemDataFilled (View v, final int i) {
 

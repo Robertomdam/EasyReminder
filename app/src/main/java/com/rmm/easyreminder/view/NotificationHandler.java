@@ -13,6 +13,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.rmm.easyreminder.R;
 
+/**
+ * @author Roberto
+ * Class that handles the app's notification process.
+ */
 public class NotificationHandler {
 
     private static final String CHANNEL_ID   = "001";
@@ -23,6 +27,10 @@ public class NotificationHandler {
 
     private Context mContext;
 
+    /**
+     * Sets initial values and creates the app's unique channel.
+     * @param context
+     */
     NotificationHandler (Context context) {
 
         mContext = context;
@@ -31,6 +39,9 @@ public class NotificationHandler {
         createChannel();
     }
 
+    /**
+     * Creates a channel to send the notifications (Only for SDK versions up to "Android Oreo").
+     */
     private void createChannel ()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -44,6 +55,13 @@ public class NotificationHandler {
         }
     }
 
+    /**
+     * Builds and sends a notification using the unique notification channel of the app.
+     * Configures a pending intent so when the user taps on the notification the Reminders Activity will pop up.
+     * Due to the simpleness of the app, the notification just configures the title, keeping empty the content text.
+     * @param notification_id The id for the notification.
+     * @param text The text that will act as the notification title.
+     */
     void sendNotification (int notification_id, String text)
     {
         NotificationCompat.Builder builder = new NotificationCompat.Builder (mContext, CHANNEL_ID);
